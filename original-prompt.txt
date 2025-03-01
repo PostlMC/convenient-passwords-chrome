@@ -1,0 +1,7 @@
+Generate a Chrome extension that can generate passwords completely offline, using the safest random generation possible in a browser extension, wiith the following options:
+- Independent choices to include of uppercase, lowercase, numeric and symbol character classes
+- The ability to specify character classes for the first and last characters
+- An option to make passwords easier to type by clustering characters that must be type with the Shift key together in a single section of the password (and allow the user to specify start, middle, or end of the password for that section)
+- Selection of password length
+- The abililty to generate up to five passwords at a time (default one)
+- An output showing the entropy of each generaated password

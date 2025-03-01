@@ -1,0 +1,300 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    width: 400px;
+    min-height: 500px;
+    max-height: 500px;
+    padding: 12px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+h1 {
+    font-size: 20px;
+    margin-top: 0;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 12px;
+    transition: color 0.3s;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 0;
+    color: #3498db;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+h3 {
+    font-size: 15px;
+    margin: 8px 0 5px;
+    color: #2c3e50;
+    transition: color 0.3s;
+}
+
+.options-section {
+    margin-bottom: 6px;
+}
+
+.option-group {
+    margin-bottom: 6px;
+}
+
+.checkbox-group,
+.select-group {
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+label {
+    font-size: 14px;
+    margin-right: 10px;
+    transition: color 0.3s;
+}
+
+input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+select {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.preferences-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.save-preferences {
+    text-align: left;
+    margin-right: 10px;
+}
+
+.save-btn {
+    background-color: #95a5a6;
+    font-size: 12px;
+    padding: 4px 10px;
+    width: auto;
+    white-space: nowrap;
+}
+
+.save-btn:hover {
+    background-color: #7f8c8d;
+}
+
+.entropy-display {
+    font-size: 11px;
+    color: #7f8c8d;
+    text-align: right;
+    transition: color 0.3s;
+    flex-grow: 1;
+    padding-top: 2px;
+}
+
+.results-section {
+    margin-top: 8px;
+    min-height: 120px;
+}
+
+.password-result {
+    margin-bottom: 4px;
+    padding: 6px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.password-text {
+    font-family: monospace;
+    font-size: 14px;
+    word-break: break-all;
+    margin-bottom: 0;
+    transition: color 0.3s;
+    line-height: 1.3;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.password-info {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.password-entropy {
+    font-size: 11px;
+    color: #7f8c8d;
+    transition: color 0.3s;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.copy-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: auto;
+    white-space: nowrap;
+}
+
+.copy-btn:hover {
+    background-color: #27ae60;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: color 0.3s;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.action-section {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #f0f0f0;
+    }
+
+    .container {
+        background-color: #2c2c2c;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        color: #f0f0f0;
+    }
+
+    h2 {
+        color: #3498db;
+        border-bottom-color: #444;
+    }
+
+    h3 {
+        color: #f0f0f0;
+    }
+
+    label {
+        color: #e0e0e0;
+    }
+
+    input[type="number"] {
+        background-color: #3c3c3c;
+        color: #f0f0f0;
+        border-color: #555;
+    }
+
+    select {
+        background-color: #3c3c3c;
+        color: #f0f0f0;
+        border-color: #555;
+    }
+
+    .password-result {
+        background-color: #3c3c3c;
+        border-color: #555;
+    }
+
+    .password-text {
+        color: #f0f0f0;
+    }
+
+    .password-entropy {
+        color: #aaa;
+    }
+
+    .entropy-display {
+        color: #aaa;
+    }
+
+    .error-message {
+        color: #ff6b6b;
+    }
+
+    button {
+        background-color: #3498db;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    .copy-btn {
+        background-color: #2ecc71;
+    }
+
+    .copy-btn:hover {
+        background-color: #27ae60;
+    }
+
+    .save-btn {
+        background-color: #546e7a;
+    }
+
+    .save-btn:hover {
+        background-color: #455a64;
+    }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Convenient Passwords</title>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="options-section">
+      <div class="option-group">
+        <label for="passwordLength">Password Length:</label>
+        <input type="number" id="passwordLength" min="8" max="64" value="16">
+      </div>
+
+      <div class="option-group">
+        <label for="passwordCount">Number of Passwords:</label>
+        <input type="number" id="passwordCount" min="1" max="5" value="3">
+      </div>
+
+      <div class="option-group character-classes">
+        <h3>Character Classes</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeLowercase" checked>
+          <label for="includeLowercase">Lowercase (a-z)</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeUppercase" checked>
+          <label for="includeUppercase">Uppercase (A-Z)</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeNumbers" checked>
+          <label for="includeNumbers">Numbers (0-9)</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeSymbols" checked>
+          <label for="includeSymbols">Symbols (!@#$%^&*)</label>
+        </div>
+      </div>
+
+      <div class="option-group first-last-char">
+        <h3>First & Last Character Classes</h3>
+        <div class="select-group">
+          <label for="firstCharClass">First Character:</label>
+          <select id="firstCharClass">
+            <option value="any">Any</option>
+            <option value="lowercase">Lowercase</option>
+            <option value="uppercase">Uppercase</option>
+            <option value="number">Number</option>
+            <option value="symbol">Symbol</option>
+            <option value="letter">Letter (a-z, A-Z)</option>
+            <option value="alphanumeric">Alphanumeric</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label for="lastCharClass">Last Character:</label>
+          <select id="lastCharClass">
+            <option value="any">Any</option>
+            <option value="lowercase">Lowercase</option>
+            <option value="uppercase">Uppercase</option>
+            <option value="number">Number</option>
+            <option value="symbol">Symbol</option>
+            <option value="letter">Letter (a-z, A-Z)</option>
+            <option value="alphanumeric">Alphanumeric</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="option-group shift-clustering">
+        <h3>Shift Key Character Clustering</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableClustering">
+          <label for="enableClustering">Cluster shift characters</label>
+        </div>
+        <div class="select-group" id="clusteringPositionGroup">
+          <label for="clusteringPosition">Position:</label>
+          <select id="clusteringPosition" disabled>
+            <option value="start">Start</option>
+            <option value="middle" selected>Middle</option>
+            <option value="end">End</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="preferences-row">
+      <div class="save-preferences">
+        <button id="savePreferencesBtn" class="save-btn">Save Preferences</button>
+      </div>
+      <div id="entropyDisplay" class="entropy-display"></div>
+    </div>
+
+    <div class="action-section">
+      <button id="generateBtn">Generate Passwords</button>
+    </div>
+
+    <div class="results-section" id="resultsSection">
+      <!-- Password results will be inserted here -->
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
