@@ -71,17 +71,19 @@
 
       <div class="option-group shift-clustering">
         <h3>Shift Key Character Clustering</h3>
-        <div class="checkbox-group">
-          <input type="checkbox" id="enableClustering">
-          <label for="enableClustering">Cluster shift characters</label>
-        </div>
-        <div class="select-group" id="clusteringPositionGroup">
-          <label for="clusteringPosition">Position:</label>
-          <select id="clusteringPosition" disabled>
-            <option value="start">Start</option>
-            <option value="middle" selected>Middle</option>
-            <option value="end">End</option>
-          </select>
+        <div class="clustering-controls">
+          <div class="checkbox-group">
+            <input type="checkbox" id="enableClustering">
+            <label for="enableClustering">Cluster shift characters</label>
+          </div>
+          <div class="select-group" id="clusteringPositionGroup">
+            <label for="clusteringPosition">Position:</label>
+            <select id="clusteringPosition" disabled>
+              <option value="start">Start</option>
+              <option value="middle" selected>Middle</option>
+              <option value="end">End</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>

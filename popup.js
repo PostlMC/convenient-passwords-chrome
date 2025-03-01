@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load saved preferences
     loadPreferences();
 
+    // Initial resize of the popup
+    setTimeout(resizePopup, 100);
+
     // Character sets
     const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
     const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -51,6 +54,12 @@ document.addEventListener('DOMContentLoaded', function () {
     includeUppercaseCheckbox.addEventListener('change', updateEntropyDisplay);
     includeNumbersCheckbox.addEventListener('change', updateEntropyDisplay);
     includeSymbolsCheckbox.addEventListener('change', updateEntropyDisplay);
+
+    // Event listener for password count to adjust container height
+    passwordCountInput.addEventListener('change', function () {
+        // Don't resize immediately when count changes, only store the value
+        // The actual resize will happen when passwords are generated
+    });
 
     // Event listener for clustering option
     enableClusteringCheckbox.addEventListener('change', function () {
@@ -145,6 +154,34 @@ document.addEventListener('DOMContentLoaded', function () {
         entropyDisplay.textContent = `Password Entropy: ${entropy} bits`;
     }
 
+    // Function to resize the popup based on content
+    function resizePopup() {
+        // Get the number of passwords
+        const passwordCount = parseInt(passwordCountInput.value) || 3;
+
+        // Adjust the container's max-height based on the number of passwords
+        const container = document.querySelector('.container');
+        if (container) {
+            // Base height for the UI without passwords
+            const baseHeight = 350;
+            // Height per password (including margins)
+            const heightPerPassword = 55;
+            // Calculate total height needed
+            let totalHeight = baseHeight + (passwordCount * heightPerPassword);
+
+            // Add extra space for 4 or 5 passwords
+            if (passwordCount >= 4) {
+                totalHeight += 50;
+            }
+            if (passwordCount >= 5) {
+                totalHeight += 60;
+            }
+
+            // Set the container height
+            container.style.minHeight = `${totalHeight}px`;
+        }
+    }
+
     // Main password generation function
     function generatePasswords() {
         // Clear previous results
@@ -190,6 +227,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             displayPassword(password);
         }
+
+        // Resize the popup after passwords are generated
+        setTimeout(resizePopup, 0);
     }
 
     // Generate a single password based on user options

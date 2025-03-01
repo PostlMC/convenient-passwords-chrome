@@ -9,12 +9,13 @@ body {
 
 .container {
     width: 400px;
-    min-height: 500px;
-    max-height: 500px;
+    min-height: 350px;
+    max-height: none;
     padding: 12px;
     background-color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, box-shadow 0.3s;
+    overflow-y: auto;
 }
 
 h1 {
@@ -38,22 +39,22 @@ h2 {
 
 h3 {
     font-size: 15px;
-    margin: 8px 0 5px;
+    margin: 6px 0 6px;
     color: #2c3e50;
     transition: color 0.3s;
 }
 
 .options-section {
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 .option-group {
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 .checkbox-group,
 .select-group {
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     display: flex;
     align-items: center;
 }
@@ -91,7 +92,7 @@ select {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .save-preferences {
@@ -121,13 +122,13 @@ select {
 }
 
 .results-section {
-    margin-top: 8px;
-    min-height: 120px;
+    margin-top: 6px;
+    min-height: auto;
 }
 
 .password-result {
-    margin-bottom: 4px;
-    padding: 6px;
+    margin-bottom: 3px;
+    padding: 4px 6px;
     background-color: #f9f9f9;
     border: 1px solid #eee;
     border-radius: 4px;
@@ -135,6 +136,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 26px;
 }
 
 .password-text {
@@ -143,7 +145,7 @@ select {
     word-break: break-all;
     margin-bottom: 0;
     transition: color 0.3s;
-    line-height: 1.3;
+    line-height: 1.2;
     flex: 1;
     margin-right: 8px;
 }
@@ -192,7 +194,7 @@ select {
 }
 
 .action-section {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     text-align: center;
 }
 
@@ -297,4 +299,21 @@ button:hover {
     .save-btn:hover {
         background-color: #455a64;
     }
+}
+
+.clustering-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clustering-controls .checkbox-group {
+    margin-right: 10px;
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.clustering-controls .select-group {
+    margin-bottom: 0;
+    flex-shrink: 0;
 }

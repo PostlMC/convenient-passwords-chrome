@@ -16,6 +16,7 @@ A Chrome extension for generating secure passwords completely offline with custo
 - Save your preferred settings for future use
 - Works completely offline - no network requests are made
 - Supports dark mode based on browser/OS settings
+- Dynamic popup sizing that adjusts to fit the number of generated passwords
 - Optimized compact layout with side-by-side password and copy button to prevent scrolling
 
 ## Installation
