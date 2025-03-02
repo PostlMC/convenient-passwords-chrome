@@ -54,6 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
     includeUppercaseCheckbox.addEventListener('change', updateEntropyDisplay);
     includeNumbersCheckbox.addEventListener('change', updateEntropyDisplay);
     includeSymbolsCheckbox.addEventListener('change', updateEntropyDisplay);
+    firstCharClassSelect.addEventListener('change', updateEntropyDisplay);
+    lastCharClassSelect.addEventListener('change', updateEntropyDisplay);
+    enableClusteringCheckbox.addEventListener('change', updateEntropyDisplay);
+    clusteringPositionSelect.addEventListener('change', updateEntropyDisplay);
 
     // Event listener for password count to adjust container height
     passwordCountInput.addEventListener('change', function () {
@@ -135,6 +139,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const includeUppercase = includeUppercaseCheckbox.checked;
         const includeNumbers = includeNumbersCheckbox.checked;
         const includeSymbols = includeSymbolsCheckbox.checked;
+        const firstCharClass = firstCharClassSelect.value;
+        const lastCharClass = lastCharClassSelect.value;
+        const enableClustering = enableClusteringCheckbox.checked;
 
         // Check if at least one character class is selected
         if (passwordLength < 1 || (!includeLowercase && !includeUppercase && !includeNumbers && !includeSymbols)) {
@@ -148,7 +155,10 @@ document.addEventListener('DOMContentLoaded', function () {
             includeLowercase,
             includeUppercase,
             includeNumbers,
-            includeSymbols
+            includeSymbols,
+            firstCharClass,
+            lastCharClass,
+            enableClustering
         );
 
         entropyDisplay.textContent = `Password Entropy: ${entropy} bits`;
@@ -503,15 +513,126 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Calculate password entropy (in bits)
-    function calculateEntropy(length, includeLowercase, includeUppercase, includeNumbers, includeSymbols) {
+    function calculateEntropy(
+        length,
+        includeLowercase,
+        includeUppercase,
+        includeNumbers,
+        includeSymbols,
+        firstCharClass = 'any',
+        lastCharClass = 'any',
+        enableClustering = false
+    ) {
+        // Calculate the size of the character pool
         let poolSize = 0;
         if (includeLowercase) poolSize += LOWERCASE_CHARS.length;
         if (includeUppercase) poolSize += UPPERCASE_CHARS.length;
         if (includeNumbers) poolSize += NUMBER_CHARS.length;
         if (includeSymbols) poolSize += SYMBOL_CHARS.length;
 
-        // Entropy formula: log2(poolSize^length) = length * log2(poolSize)
-        const entropy = length * (Math.log(poolSize) / Math.log(2));
+        // If no characters are selected, entropy is 0
+        if (poolSize === 0) return "0.00";
+
+        // Base entropy calculation for the entire password
+        let entropy = length * (Math.log(poolSize) / Math.log(2));
+
+        // Adjust for first character class restriction
+        if (firstCharClass !== 'any' && length > 0) {
+            // Calculate the size of the restricted pool for the first character
+            let firstCharPoolSize = 0;
+            switch (firstCharClass) {
+                case 'lowercase':
+                    firstCharPoolSize = includeLowercase ? LOWERCASE_CHARS.length : 0;
+                    break;
+                case 'uppercase':
+                    firstCharPoolSize = includeUppercase ? UPPERCASE_CHARS.length : 0;
+                    break;
+                case 'number':
+                    firstCharPoolSize = includeNumbers ? NUMBER_CHARS.length : 0;
+                    break;
+                case 'symbol':
+                    firstCharPoolSize = includeSymbols ? SYMBOL_CHARS.length : 0;
+                    break;
+                case 'letter':
+                    if (includeLowercase) firstCharPoolSize += LOWERCASE_CHARS.length;
+                    if (includeUppercase) firstCharPoolSize += UPPERCASE_CHARS.length;
+                    break;
+                case 'alphanumeric':
+                    if (includeLowercase) firstCharPoolSize += LOWERCASE_CHARS.length;
+                    if (includeUppercase) firstCharPoolSize += UPPERCASE_CHARS.length;
+                    if (includeNumbers) firstCharPoolSize += NUMBER_CHARS.length;
+                    break;
+            }
+
+            // If the restricted pool is valid, adjust entropy
+            if (firstCharPoolSize > 0 && firstCharPoolSize < poolSize) {
+                // Subtract entropy for one character with full pool
+                entropy -= Math.log(poolSize) / Math.log(2);
+                // Add entropy for one character with restricted pool
+                entropy += Math.log(firstCharPoolSize) / Math.log(2);
+            }
+        }
+
+        // Adjust for last character class restriction
+        if (lastCharClass !== 'any' && length > 1) {
+            // Calculate the size of the restricted pool for the last character
+            let lastCharPoolSize = 0;
+            switch (lastCharClass) {
+                case 'lowercase':
+                    lastCharPoolSize = includeLowercase ? LOWERCASE_CHARS.length : 0;
+                    break;
+                case 'uppercase':
+                    lastCharPoolSize = includeUppercase ? UPPERCASE_CHARS.length : 0;
+                    break;
+                case 'number':
+                    lastCharPoolSize = includeNumbers ? NUMBER_CHARS.length : 0;
+                    break;
+                case 'symbol':
+                    lastCharPoolSize = includeSymbols ? SYMBOL_CHARS.length : 0;
+                    break;
+                case 'letter':
+                    if (includeLowercase) lastCharPoolSize += LOWERCASE_CHARS.length;
+                    if (includeUppercase) lastCharPoolSize += UPPERCASE_CHARS.length;
+                    break;
+                case 'alphanumeric':
+                    if (includeLowercase) lastCharPoolSize += LOWERCASE_CHARS.length;
+                    if (includeUppercase) lastCharPoolSize += UPPERCASE_CHARS.length;
+                    if (includeNumbers) lastCharPoolSize += NUMBER_CHARS.length;
+                    break;
+            }
+
+            // If the restricted pool is valid, adjust entropy
+            if (lastCharPoolSize > 0 && lastCharPoolSize < poolSize) {
+                // Subtract entropy for one character with full pool
+                entropy -= Math.log(poolSize) / Math.log(2);
+                // Add entropy for one character with restricted pool
+                entropy += Math.log(lastCharPoolSize) / Math.log(2);
+            }
+        }
+
+        // Adjust for clustering (approximate reduction due to predictable structure)
+        if (enableClustering && length >= 4) {
+            // Calculate shift and non-shift character pools
+            let shiftPoolSize = 0;
+            let nonShiftPoolSize = 0;
+
+            if (includeUppercase) shiftPoolSize += UPPERCASE_CHARS.length;
+            if (includeSymbols) shiftPoolSize += SYMBOL_CHARS.length;
+            if (includeLowercase) nonShiftPoolSize += LOWERCASE_CHARS.length;
+            if (includeNumbers) nonShiftPoolSize += NUMBER_CHARS.length;
+
+            // Only apply reduction if both pools have characters
+            if (shiftPoolSize > 0 && nonShiftPoolSize > 0) {
+                // Approximate entropy reduction due to clustering (conservative estimate)
+                // This is a simplified model - actual reduction would require more complex analysis
+                const clusteringReduction = Math.min(2, length * 0.05);
+                entropy -= clusteringReduction;
+            }
+        }
+
+        // Ensure entropy is never negative
+        entropy = Math.max(0, entropy);
+
         return entropy.toFixed(2);
     }
 
