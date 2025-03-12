@@ -21,11 +21,13 @@ A Chrome extension for generating secure passwords completely offline with custo
 
 ## Installation
 
+<!--
 ### From Chrome Web Store (Coming Soon)
 
 1. Visit the Chrome Web Store page for Convenient Passwords
 2. Click "Add to Chrome"
 3. Confirm the installation
+-->
 
 ### Manual Installation (Developer Mode)
 
@@ -59,4 +61,4 @@ This extension generates passwords completely offline using the Web Cryptography
 
 ## License
 
-MIT License 
+MIT License

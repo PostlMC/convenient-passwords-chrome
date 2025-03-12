@@ -15,6 +15,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultsSection = document.getElementById('resultsSection');
     const entropyDisplay = document.getElementById('entropyDisplay');
 
+    // Character sets
+    const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
+    const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const NUMBER_CHARS = '0123456789';
+    const SYMBOL_CHARS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    // Characters that require the Shift key (uppercase and symbols)
+    const SHIFT_CHARS = UPPERCASE_CHARS + SYMBOL_CHARS;
+    const NON_SHIFT_CHARS = LOWERCASE_CHARS + NUMBER_CHARS;
+
     // Dark mode detection
     function setupThemeDetection() {
         // Check if the user prefers dark mode
@@ -29,55 +39,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initialize theme detection
-    setupThemeDetection();
+    // Function to resize the popup based on content
+    function resizePopup() {
+        // Get the number of passwords to display
+        const passwordResults = document.querySelectorAll('.password-result');
+        const passwordCount = passwordResults.length || parseInt(passwordCountInput.value) || 3;
 
-    // Load saved preferences
-    loadPreferences();
+        // Adjust the container's height based on content
+        const container = document.querySelector('.container');
+        if (container) {
+            // Base height for the UI without password results
+            const baseHeight = 320;
 
-    // Initial resize of the popup
-    setTimeout(resizePopup, 100);
+            // Height calculation for passwords
+            const heightPerPassword = 38;
 
-    // Character sets
-    const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
-    const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const NUMBER_CHARS = '0123456789';
-    const SYMBOL_CHARS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            // Calculate total height needed
+            let totalHeight = baseHeight;
 
-    // Characters that require the Shift key (uppercase and symbols)
-    const SHIFT_CHARS = UPPERCASE_CHARS + SYMBOL_CHARS;
-    const NON_SHIFT_CHARS = LOWERCASE_CHARS + NUMBER_CHARS;
+            // Add height for the passwords
+            if (passwordResults.length > 0 || resultsSection.querySelector('.error-message')) {
+                // If we have passwords or an error message displayed
+                totalHeight += (passwordCount * heightPerPassword);
+            } else {
+                // Just a small amount of space in the empty state
+                totalHeight += 10;
+            }
 
-    // Event listeners for real-time entropy updates
-    passwordLengthInput.addEventListener('input', updateEntropyDisplay);
-    includeLowercaseCheckbox.addEventListener('change', updateEntropyDisplay);
-    includeUppercaseCheckbox.addEventListener('change', updateEntropyDisplay);
-    includeNumbersCheckbox.addEventListener('change', updateEntropyDisplay);
-    includeSymbolsCheckbox.addEventListener('change', updateEntropyDisplay);
-    firstCharClassSelect.addEventListener('change', updateEntropyDisplay);
-    lastCharClassSelect.addEventListener('change', updateEntropyDisplay);
-    enableClusteringCheckbox.addEventListener('change', updateEntropyDisplay);
-    clusteringPositionSelect.addEventListener('change', updateEntropyDisplay);
-
-    // Event listener for password count to adjust container height
-    passwordCountInput.addEventListener('change', function () {
-        // Don't resize immediately when count changes, only store the value
-        // The actual resize will happen when passwords are generated
-    });
-
-    // Event listener for clustering option
-    enableClusteringCheckbox.addEventListener('change', function () {
-        clusteringPositionSelect.disabled = !this.checked;
-    });
-
-    // Generate button event listener
-    generateBtn.addEventListener('click', generatePasswords);
-
-    // Save preferences button event listener
-    savePreferencesBtn.addEventListener('click', savePreferences);
-
-    // Update entropy display initially
-    updateEntropyDisplay();
+            // Set the container height
+            container.style.minHeight = `${totalHeight}px`;
+        }
+    }
 
     // Function to save user preferences
     function savePreferences() {
@@ -164,34 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
         entropyDisplay.textContent = `Password Entropy: ${entropy} bits`;
     }
 
-    // Function to resize the popup based on content
-    function resizePopup() {
-        // Get the number of passwords
-        const passwordCount = parseInt(passwordCountInput.value) || 3;
-
-        // Adjust the container's max-height based on the number of passwords
-        const container = document.querySelector('.container');
-        if (container) {
-            // Base height for the UI without passwords
-            const baseHeight = 350;
-            // Height per password (including margins)
-            const heightPerPassword = 55;
-            // Calculate total height needed
-            let totalHeight = baseHeight + (passwordCount * heightPerPassword);
-
-            // Add extra space for 4 or 5 passwords
-            if (passwordCount >= 4) {
-                totalHeight += 50;
-            }
-            if (passwordCount >= 5) {
-                totalHeight += 60;
-            }
-
-            // Set the container height
-            container.style.minHeight = `${totalHeight}px`;
-        }
-    }
-
     // Main password generation function
     function generatePasswords() {
         // Clear previous results
@@ -239,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Resize the popup after passwords are generated
-        setTimeout(resizePopup, 0);
+        setTimeout(resizePopup, 50);
     }
 
     // Generate a single password based on user options
@@ -676,5 +640,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
         resultsSection.innerHTML = '';
         resultsSection.appendChild(errorElement);
+
+        // Resize to account for the error message
+        setTimeout(resizePopup, 10);
     }
+
+    // Initialize theme detection
+    setupThemeDetection();
+
+    // Load saved preferences
+    loadPreferences();
+
+    // Initialize display and sizing
+    updateEntropyDisplay();
+    resizePopup();
+
+    // Event listeners for real-time entropy updates
+    passwordLengthInput.addEventListener('input', updateEntropyDisplay);
+    includeLowercaseCheckbox.addEventListener('change', updateEntropyDisplay);
+    includeUppercaseCheckbox.addEventListener('change', updateEntropyDisplay);
+    includeNumbersCheckbox.addEventListener('change', updateEntropyDisplay);
+    includeSymbolsCheckbox.addEventListener('change', updateEntropyDisplay);
+    firstCharClassSelect.addEventListener('change', updateEntropyDisplay);
+    lastCharClassSelect.addEventListener('change', updateEntropyDisplay);
+    enableClusteringCheckbox.addEventListener('change', updateEntropyDisplay);
+    clusteringPositionSelect.addEventListener('change', updateEntropyDisplay);
+
+    // Event listener for password count to adjust preview size
+    passwordCountInput.addEventListener('change', function () {
+        // Only resize the container, never auto-generate passwords
+        // This allows the user to choose how many passwords they want before generating
+        resizePopup();
+    });
+
+    // Event listener for clustering option
+    enableClusteringCheckbox.addEventListener('change', function () {
+        clusteringPositionSelect.disabled = !this.checked;
+    });
+
+    // Generate button event listener
+    generateBtn.addEventListener('click', generatePasswords);
+
+    // Save preferences button event listener
+    savePreferencesBtn.addEventListener('click', savePreferences);
 }); 
